@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_maps/business_logic/phone_auth/phone_auth_cubit.dart';
 import 'package:flutter_maps/core/utils/app_color.dart';
-import 'package:flutter_maps/core/utils/app_router.dart';
 import 'package:flutter_maps/core/utils/app_strings.dart';
-import 'package:flutter_maps/presentation/screens/otp_screen.dart';
+import '../../business_logic/phone_auth/phone_auth_cubit.dart';
 
 class LoginScreen extends StatelessWidget {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -20,16 +18,19 @@ class LoginScreen extends StatelessWidget {
           key: formKey,
           child: Container(
             margin: EdgeInsets.symmetric(horizontal: 32, vertical: 88),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildIntroText(),
-                const SizedBox(height: 110),
-                _buildPhoneNumberField(),
-                const SizedBox(height: 50),
-                _buildNextButton(context),
-                _buildPhoneNumberSubmittedBloc(),
-              ],
+            child: SingleChildScrollView(
+              physics: BouncingScrollPhysics(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildIntroText(),
+                  const SizedBox(height: 110),
+                  _buildPhoneNumberField(),
+                  const SizedBox(height: 50),
+                  _buildNextButton(context),
+                  _buildPhoneNumberSubmittedBloc(),
+                ],
+              ),
             ),
           ),
         ),
@@ -166,7 +167,7 @@ class LoginScreen extends StatelessWidget {
           String errorMsg = state.message.toString();
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(errorMsg,style: TextStyle(fontSize: 26),),
+              content: Text(errorMsg, style: TextStyle(fontSize: 26)),
               backgroundColor: Colors.black,
               duration: Duration(seconds: 10),
             ),
@@ -196,12 +197,11 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  Future<void> _register(BuildContext context) async{
-    if(!formKey.currentState!.validate()){
+  Future<void> _register(BuildContext context) async {
+    if (!formKey.currentState!.validate()) {
       Navigator.pop(context);
       return;
-    }
-    else{
+    } else {
       Navigator.pop(context);
       formKey.currentState!.save();
       BlocProvider.of<PhoneAuthCubit>(context).submitPhoneNumber(phoneNumber);

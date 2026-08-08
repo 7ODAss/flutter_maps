@@ -2,15 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps/core/utils/app_color.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
-
+import '../../../core/utils/app_strings.dart';
 import '../../business_logic/phone_auth/phone_auth_cubit.dart';
-import '../../core/utils/app_strings.dart';
 
 class OtpScreen extends StatelessWidget {
   final phoneNumber;
   late String otpCode;
-  OtpScreen({super.key,required this.phoneNumber});
-
+  OtpScreen({super.key, required this.phoneNumber});
 
   @override
   Widget build(BuildContext context) {
@@ -19,25 +17,23 @@ class OtpScreen extends StatelessWidget {
         backgroundColor: Colors.white,
         body: Container(
           margin: EdgeInsets.symmetric(horizontal: 32, vertical: 88),
-          child: Column(
-            children: [
-              _buildIntroTexts(),
-              SizedBox(
-                height: 88,
-              ),
-              _buildPinCodeFields(context),
-              SizedBox(
-                height: 60,
-              ),
-              _buildVerifyButton(context),
-              _buildPhoneVerificationBloc(),
-            ],
+          child: SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+            child: Column(
+              children: [
+                _buildIntroTexts(),
+                SizedBox(height: 88),
+                _buildPinCodeFields(context),
+                SizedBox(height: 60),
+                _buildVerifyButton(context),
+                _buildPhoneVerificationBloc(),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
-
 
   Widget _buildIntroTexts() {
     return Column(
@@ -46,11 +42,12 @@ class OtpScreen extends StatelessWidget {
         Text(
           'Verify your phone number',
           style: TextStyle(
-              color: Colors.black, fontSize: 24, fontWeight: FontWeight.bold),
+            color: Colors.black,
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
         ),
-        SizedBox(
-          height: 30,
-        ),
+        SizedBox(height: 30),
         Container(
           margin: EdgeInsets.symmetric(horizontal: 2),
           child: RichText(
@@ -76,14 +73,17 @@ class OtpScreen extends StatelessWidget {
       elevation: 0,
       content: Center(
         child: CircularProgressIndicator(
-          valueColor: AlwaysStoppedAnimation<Color>(Colors.black),),
+          valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
+        ),
       ),
     );
 
-    showDialog(barrierColor: Colors.white.withOpacity(0),
+    showDialog(
+      barrierColor: Colors.white.withOpacity(0),
       barrierDismissible: false,
       context: context,
-      builder: (context) => alertDialog,);
+      builder: (context) => alertDialog,
+    );
   }
 
   Widget _buildPinCodeFields(BuildContext context) {
@@ -116,7 +116,7 @@ class OtpScreen extends StatelessWidget {
           }).toList(),
         );
       },
-      onCompleted: (pin) => otpCode=pin,
+      onCompleted: (pin) => otpCode = pin,
     );
   }
 
@@ -141,7 +141,7 @@ class OtpScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildPhoneVerificationBloc(){
+  Widget _buildPhoneVerificationBloc() {
     return BlocListener<PhoneAuthCubit, PhoneAuthState>(
       listenWhen: (previous, current) {
         return previous != current;
@@ -152,10 +152,7 @@ class OtpScreen extends StatelessWidget {
         }
         if (state is PhoneOtpVerified) {
           Navigator.pop(context);
-          Navigator.pushReplacementNamed(
-            context,
-            AppStrings.mapScreen,
-          );
+          Navigator.pushReplacementNamed(context, AppStrings.mapScreen);
         }
         if (state is ErrorOccurred) {
           //Navigator.pop(context);
@@ -176,5 +173,4 @@ class OtpScreen extends StatelessWidget {
   void _login(BuildContext context) {
     BlocProvider.of<PhoneAuthCubit>(context).submitOtp(otpCode);
   }
-
 }

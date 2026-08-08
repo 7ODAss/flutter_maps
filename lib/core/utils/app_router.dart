@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_maps/presentation/screens/map_screen.dart';
-
-import '../../business_logic/phone_auth/phone_auth_cubit.dart';
-import '../../presentation/screens/login_screen.dart';
-import '../../presentation/screens/otp_screen.dart';
+import '../../features/business_logic/phone_auth/phone_auth_cubit.dart';
+import '../../features/presentation/screens/login_screen.dart';
+import '../../features/presentation/screens/map_screen.dart';
+import '../../features/presentation/screens/otp_screen.dart';
 import 'app_strings.dart';
 
 class AppRouter {

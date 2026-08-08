@@ -4,18 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_maps/core/utils/app_strings.dart';
 import 'core/utils/app_router.dart';
 
-//late String initialRoute;
+late String initialRoute;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
-  // FirebaseAuth.instance.authStateChanges().listen((user){
-  //   if(user == null) {
-  //     initialRoute = AppStrings.loginScreen;
-  //   }else{
-  //     initialRoute = AppStrings.mapScreen;
-  //   }
-  // });
+  FirebaseAuth.instance.authStateChanges().listen((user){
+    if(user == null) {
+      initialRoute = AppStrings.loginScreen;
+    }else{
+      initialRoute = AppStrings.mapScreen;
+    }
+  });
   runApp(MyApp(appRouter: AppRouter()));
 }
 
@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       onGenerateRoute: appRouter.generateRoute,
-      //initialRoute: initialRoute,
+      initialRoute: initialRoute,
     );
   }
 }
